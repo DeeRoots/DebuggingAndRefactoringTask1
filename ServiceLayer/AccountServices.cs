@@ -16,8 +16,11 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
             bool accountCodeExists = DoesAccountCodeExist(accountCode);
             if (!accountCodeExists)
             {
-                AddAccount(new Account { Id = accounts.Count(), AccountCode = accountCode, AccountName = accountName, AccountBalance = 0.00 });
-                return true;
+                var success = AddAccount(new Account { Id = accounts.Count() + 1, AccountCode = accountCode, AccountName = accountName, AccountBalance = 0.00 });
+                if (success) 
+                    return true;
+                else
+                    return false;
             }
             else
                 return false;
@@ -67,6 +70,27 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
                     return true;
                 else
                     return false;   
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool TransferBetweenAccounts(int accountCode, int accountCodeTo, double amount)
+        {
+            var account = GetAccount(accountCode);
+            var recipientAccount = GetAccount(accountCodeTo);
+            var accountOriginalBalance = account.AccountBalance;
+            if (account != null && recipientAccount != null)
+            {
+                recipientAccount.AccountBalance = amount <= account.AccountBalance ? recipientAccount.AccountBalance += amount : account.AccountBalance = accountOriginalBalance;
+                account.AccountBalance = amount <= account.AccountBalance ? account.AccountBalance -= amount : account.AccountBalance = accountOriginalBalance;
+
+                if (account.AccountBalance < accountOriginalBalance)
+                    return true;
+                else
+                    return false;
             }
             else
             {

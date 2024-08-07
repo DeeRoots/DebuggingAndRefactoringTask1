@@ -27,7 +27,7 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
                 return rawInput;
             }
         }
-        public  int? GatherNumericInput(string message)
+        public int? GatherNumericInput(string message)
         {
             try
             {
@@ -96,7 +96,9 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
             DisplayMessage(MessageType.MenuItem, $"2. Deposit Money");
             DisplayMessage(MessageType.MenuItem, $"3. Withdraw Money");
             DisplayMessage(MessageType.MenuItem, $"4. Display Account Details");
-            DisplayMessage(MessageType.MenuItem, $"5. Exit \n");
+            DisplayMessage(MessageType.MenuItem, $"5. Display Account Transaction History");
+            DisplayMessage(MessageType.MenuItem, $"6. Tranfer between accounts");
+            DisplayMessage(MessageType.MenuItem, $"7. Exit \n");
 
             var choiceParsed = GatherNumericInput($"Choice: ");
 

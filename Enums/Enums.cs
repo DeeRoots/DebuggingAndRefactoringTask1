@@ -21,7 +21,8 @@ namespace DebuggingAndRefactoringTask1.Enums
         public enum AccountInteractionType
         {
             Deposit = 0,
-            Withdraw = 1
+            Withdraw = 1,
+            Tranfer = 2
         }
     }
 }
