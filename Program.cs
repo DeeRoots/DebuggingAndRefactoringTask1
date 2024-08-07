@@ -65,75 +65,97 @@ namespace BankingSystem
 
         static void AddAccount()
         {
-            var accountCodeParsed = GatherNumericInput("Enter Account Code: ");          
-
-            if (accountCodeParsed != null)
-            {             
-                var name = GatherTextualInput("Enter Account Holder Name: ");
-
-                if (name != null)
-                {
-                    Account account = new Account { Id = accounts.Count + 1, AccountCode = accountCodeParsed.Value,  AccountName = name.Trim(), AccountBalance = 0 };
-                    accounts.Add(account);
-
-                    DisplayMessage(MessageType.Success, "Account added successfully.");
-                }                
-            }
-            else
+            try
             {
-                DisplayMessage(MessageType.Error, "Account not added - Please try again");
-            }            
+                var accountCodeParsed = GatherNumericInput("Enter Account Code: ");
+
+                if (accountCodeParsed != null)
+                {
+                    var name = GatherTextualInput("Enter Account Holder Name: ");
+
+                    if (name != null)
+                    {
+                        Account account = new Account { Id = accounts.Count + 1, AccountCode = accountCodeParsed.Value, AccountName = name.Trim(), AccountBalance = 0 };
+                        accounts.Add(account);
+
+                        DisplayMessage(MessageType.Success, "Account added successfully.");
+                    }
+                }
+                else
+                {
+                    DisplayMessage(MessageType.Error, "Account not added - Please try again");
+                }
+            }
+            catch (Exception e)
+            {
+                DisplayMessage(MessageType.Error, "Exception Hit.");
+            }          
         }
 
         static void MonetaryInteraction(AccountInteractionType accountInteractionType)
         {
-            var parsedAccountCode = GatherNumericInput("Enter Account Code: ");
-
-            var parsedMonetarylAmount = accountInteractionType == AccountInteractionType.Deposit ? GatherDoublelInput("Enter Amount to Deposit: ") : GatherDoublelInput("Enter Amount to Withdraw: ");
-
-            if (parsedAccountCode != null && parsedMonetarylAmount != null)
+            try
             {
-                foreach (var account in accounts.Where(a => a.AccountCode == parsedAccountCode))
-                {
-                    var originalBalance = account.AccountBalance;
-                    account.AccountBalance = accountInteractionType == AccountInteractionType.Deposit ? account.AccountBalance += parsedMonetarylAmount.Value : account.AccountBalance >= parsedMonetarylAmount ? account.AccountBalance -= parsedMonetarylAmount.Value : originalBalance;
+                var parsedAccountCode = GatherNumericInput("Enter Account Code: ");
 
-                    if (accountInteractionType == AccountInteractionType.Deposit)
-                        DisplayMessage(MessageType.Success, "Deposit successful.");
-                    else
+                var parsedMonetarylAmount = accountInteractionType == AccountInteractionType.Deposit ? GatherDoublelInput("Enter Amount to Deposit: ") : GatherDoublelInput("Enter Amount to Withdraw: ");
+
+                if (parsedAccountCode != null && parsedMonetarylAmount != null)
+                {
+                    foreach (var account in accounts.Where(a => a.AccountCode == parsedAccountCode))
                     {
-                        if (account.AccountBalance == originalBalance)
-                            DisplayMessage(MessageType.Warning, "Insufficient balance.");
+                        var originalBalance = account.AccountBalance;
+                        account.AccountBalance = accountInteractionType == AccountInteractionType.Deposit ? account.AccountBalance += parsedMonetarylAmount.Value : account.AccountBalance >= parsedMonetarylAmount ? account.AccountBalance -= parsedMonetarylAmount.Value : originalBalance;
+
+                        if (accountInteractionType == AccountInteractionType.Deposit)
+                            DisplayMessage(MessageType.Success, "Deposit successful.");
                         else
-                            DisplayMessage(MessageType.Success, "Withdrawal successful.");
+                        {
+                            if (account.AccountBalance == originalBalance)
+                                DisplayMessage(MessageType.Warning, "Insufficient balance.");
+                            else
+                                DisplayMessage(MessageType.Success, "Withdrawal successful.");
+                        }
                     }
                 }
+                else
+                    DisplayMessage(MessageType.Error, "Account not found.");
             }
-            else
-                DisplayMessage(MessageType.Error, "Account not found.");
+            catch (Exception e)
+            {
+                DisplayMessage(MessageType.Error, "Exception Hit.");
+            }
+          
         }
 
       
 
         static void DisplayAccountDetails()
         {
-            var parsedAccountCode = GatherNumericInput("Enter Account Code: ");
-
-            if (parsedAccountCode != null)
+            try
             {
-                foreach (var account in accounts.Where(a => a.AccountCode == parsedAccountCode))
-                {
-                    DisplayMessage(MessageType.MenuItem, $"Account ID (Should be hidden): {account.Id}");
-                    DisplayMessage(MessageType.MenuItem, $"Account Code: {account.AccountCode}");
-                    DisplayMessage(MessageType.MenuItem, $"Account Holder: {account.AccountName}");
-                    DisplayMessage(MessageType.MenuItem, $"Balance: {account.AccountBalance}");
+                var parsedAccountCode = GatherNumericInput("Enter Account Code: ");
 
-                    return;
+                if (parsedAccountCode != null)
+                {
+                    foreach (var account in accounts.Where(a => a.AccountCode == parsedAccountCode))
+                    {
+                        DisplayMessage(MessageType.MenuItem, $"Account ID (Should be hidden): {account.Id}");
+                        DisplayMessage(MessageType.MenuItem, $"Account Code: {account.AccountCode}");
+                        DisplayMessage(MessageType.MenuItem, $"Account Holder: {account.AccountName}");
+                        DisplayMessage(MessageType.MenuItem, $"Balance: {account.AccountBalance}");
+
+                        return;
+                    }
+                    DisplayMessage(MessageType.Error, "Account not found.");
                 }
-                DisplayMessage(MessageType.Error, "Account not found.");
+                else
+                    DisplayMessage(MessageType.Error, "Account not found.");
             }
-            else
-                DisplayMessage(MessageType.Error, "Account not found.");
+            catch (Exception e)
+            {
+                DisplayMessage(MessageType.Error, "Exception Hit.");                
+            }
         }
 
 
@@ -157,46 +179,60 @@ namespace BankingSystem
         }
         static int? GatherNumericInput(string message)
         {
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write(message);
-            Console.ForegroundColor = ConsoleColor.White;
-            var resultParse = int.TryParse(Console.ReadLine(), out int result);
-            Console.Write(Environment.NewLine);
-            if (resultParse)
+            try
             {
-                var numericInput = result;
-                return numericInput;
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write(message);
+                Console.ForegroundColor = ConsoleColor.White;
+                var resultParse = int.TryParse(Console.ReadLine(), out int result);
+                Console.Write(Environment.NewLine);
+                if (resultParse && result <= int.MaxValue && result >= int.MinValue)
+                {
+                    var numericInput = result;
+                    return numericInput;
+                }
+                else
+                {
+                    DisplayMessage(MessageType.Error, "Value MUST be numeric.");
+                }
+                return null;
             }
-            else
+            catch (Exception e)
             {
-                DisplayMessage(MessageType.Error, "Value MUST be numeric.");
-            }
-           return null;
-
+                DisplayMessage(MessageType.Error, "Exception Hit.");
+                return null;
+            }        
         }
         static double? GatherDoublelInput(string message)
         {
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write(message);
-            Console.ForegroundColor = ConsoleColor.White;
-            var resultParse = double.TryParse(Console.ReadLine(), out double result);
-            if (resultParse)
+            try
             {
-                var returnValue = result;
-                if (returnValue == 0.00)
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write(message);
+                Console.ForegroundColor = ConsoleColor.White;
+                var resultParse = double.TryParse(Console.ReadLine(), out double result);
+                if (resultParse && result <= double.MaxValue && result >= double.MinValue)
                 {
-                    DisplayMessage(MessageType.Error, "Value MUST include decimal place and numbers only.");
-                    return null;
+                    var returnValue = result;
+                    if (returnValue == 0.00)
+                    {
+                        DisplayMessage(MessageType.Error, "Value MUST include decimal place and numbers only.");
+                        return null;
+                    }
+                    else
+                        return returnValue;
                 }
                 else
-                    return returnValue;
+                {
+                    DisplayMessage(MessageType.Error, "Value MUST include decimal place and numbers only.");
+                }
+                return null;
             }
-            else
+            catch (Exception e)
             {
-                DisplayMessage(MessageType.Error, "Value MUST include decimal place and numbers only.");
-            }
-            return null;
-
+                DisplayMessage(MessageType.Error, "Exception Hit.");
+                return null;
+            }        
         }
         #endregion
 
@@ -268,6 +304,10 @@ namespace BankingSystem
             Console.ForegroundColor = ConsoleColor.White;
         }
         #endregion
+    }
+
+    class AccountRepositoryLayer
+    { 
     }
 
     class Account
