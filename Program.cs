@@ -15,12 +15,7 @@ namespace BankingSystem
             MenuItem = 4,
             Input = 5
 
-        }
-        enum InputType 
-        {
-            Numeric = 0,
-            Textual = 1,
-        }
+        }       
         enum AccountInteractionType 
         {
             Deposit = 0,
@@ -33,41 +28,44 @@ namespace BankingSystem
         {
             while (true)
             {
-                DisplayMessage(MessageType.Information, $"Options:\n");
-                DisplayMessage(MessageType.MenuItem, $"1. Add Account");
-                DisplayMessage(MessageType.MenuItem, $"2. Deposit Money");
-                DisplayMessage(MessageType.MenuItem, $"3. Withdraw Money");
-                DisplayMessage(MessageType.MenuItem, $"4. Display Account Details");
-                DisplayMessage(MessageType.MenuItem, $"5. Exit \n");
-
-                var choiceParsed = GatherNumericInput($"Choice: ");
-
-                switch (choiceParsed)
-                {
-                    case 1:
-                        AddAccount();
-                        break;
-                    case 2:
-                        MonetaryInteraction(AccountInteractionType.Deposit);                        
-                        break;
-                    case 3:
-                        MonetaryInteraction(AccountInteractionType.Withdraw);
-                        break;
-                    case 4:
-                        DisplayAccountDetails();
-                        break;
-                    case 5:
-                        break;
-                    default:                        
-                        break;
-                }
-
+                RunApplication();
             }
         } 
+        static void RunApplication()
+        {
+            DisplayMessage(MessageType.Information, $"Options:\n");
+            DisplayMessage(MessageType.MenuItem, $"1. Add Account");
+            DisplayMessage(MessageType.MenuItem, $"2. Deposit Money");
+            DisplayMessage(MessageType.MenuItem, $"3. Withdraw Money");
+            DisplayMessage(MessageType.MenuItem, $"4. Display Account Details");
+            DisplayMessage(MessageType.MenuItem, $"5. Exit \n");
+
+            var choiceParsed = GatherNumericInput($"Choice: ");
+
+            switch (choiceParsed)
+            {
+                case 1:
+                    AddAccount();
+                    break;
+                case 2:
+                    MonetaryInteraction(AccountInteractionType.Deposit);
+                    break;
+                case 3:
+                    MonetaryInteraction(AccountInteractionType.Withdraw);
+                    break;
+                case 4:
+                    DisplayAccountDetails();
+                    break;
+                case 5:
+                    break;
+                default:
+                    break;
+            }
+        }
 
         static void AddAccount()
         {
-            var accountCodeParsed = GatherNumericInput("Enter Account Number: ");          
+            var accountCodeParsed = GatherNumericInput("Enter Account Code: ");          
 
             if (accountCodeParsed != null)
             {             
@@ -89,7 +87,7 @@ namespace BankingSystem
 
         static void MonetaryInteraction(AccountInteractionType accountInteractionType)
         {
-            var parsedAccountCode = GatherNumericInput("Enter Account Number: ");
+            var parsedAccountCode = GatherNumericInput("Enter Account Code: ");
 
             var parsedMonetarylAmount = accountInteractionType == AccountInteractionType.Deposit ? GatherDoublelInput("Enter Amount to Deposit: ") : GatherDoublelInput("Enter Amount to Withdraw: ");
 
@@ -105,7 +103,7 @@ namespace BankingSystem
                     else
                     {
                         if (account.AccountBalance == originalBalance)
-                            DisplayMessage(MessageType.Error, "Insufficient balance.");
+                            DisplayMessage(MessageType.Warning, "Insufficient balance.");
                         else
                             DisplayMessage(MessageType.Success, "Withdrawal successful.");
                     }
@@ -119,44 +117,27 @@ namespace BankingSystem
 
         static void DisplayAccountDetails()
         {
-            DisplayMessage(MessageType.Information, "Enter Account ID:");
-            var resultParse = int.TryParse(Console.ReadLine(), out int result);
+            var parsedAccountCode = GatherNumericInput("Enter Account Code: ");
 
-            var id = result;
-
-            foreach (var account in accounts)
+            if (parsedAccountCode != null)
             {
-                if (account.Id == id)
+                foreach (var account in accounts.Where(a => a.AccountCode == parsedAccountCode))
                 {
                     DisplayMessage(MessageType.MenuItem, $"Account ID (Should be hidden): {account.Id}");
                     DisplayMessage(MessageType.MenuItem, $"Account Code: {account.AccountCode}");
                     DisplayMessage(MessageType.MenuItem, $"Account Holder: {account.AccountName}");
                     DisplayMessage(MessageType.MenuItem, $"Balance: {account.AccountBalance}");
+
                     return;
                 }
+                DisplayMessage(MessageType.Error, "Account not found.");
             }
-
-            DisplayMessage(MessageType.Error, "Account not found.");
+            else
+                DisplayMessage(MessageType.Error, "Account not found.");
         }
 
 
         #region Input
-
-        private static void GatherInput(InputType numeric, string message)
-        {
-            switch (numeric)
-            {
-                case InputType.Numeric:
-                    GatherNumericInput(message);
-                    break;
-                case InputType.Textual:
-                    GatherTextualInput(message);
-                    break;
-                default:
-                    break;
-            }
-        }
-
         static string? GatherTextualInput(string message)
         {
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -174,7 +155,6 @@ namespace BankingSystem
                 return rawInput;
             }
         }
-
         static int? GatherNumericInput(string message)
         {
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -184,8 +164,8 @@ namespace BankingSystem
             Console.Write(Environment.NewLine);
             if (resultParse)
             {
-                var id = result;
-                return id;
+                var numericInput = result;
+                return numericInput;
             }
             else
             {
@@ -194,7 +174,6 @@ namespace BankingSystem
            return null;
 
         }
-
         static double? GatherDoublelInput(string message)
         {
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -219,7 +198,6 @@ namespace BankingSystem
             return null;
 
         }
-
         #endregion
 
         #region Messages
@@ -253,6 +231,7 @@ namespace BankingSystem
         static void DisplayInformationMessage(string message) 
         {            
             Console.WriteLine(message);
+            Console.WriteLine("");
         }
         static void DisplayWarningMessage(string message) 
         {
@@ -288,7 +267,6 @@ namespace BankingSystem
             Console.Write(message);
             Console.ForegroundColor = ConsoleColor.White;
         }
-
         #endregion
     }
 

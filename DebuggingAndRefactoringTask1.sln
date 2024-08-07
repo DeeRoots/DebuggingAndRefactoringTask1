@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebuggingAndRefactoringTask1", "DebuggingAndRefactoringTask1.csproj", "{11171346-B978-47D5-9AF1-D90BEE023054}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DebuggingAndRefactoringTask1", "DebuggingAndRefactoringTask1.csproj", "{11171346-B978-47D5-9AF1-D90BEE023054}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebuggingAndRefactoringTask1UnitTestProject", "..\DebuggingAndRefactoringTask1UnitTestProject\DebuggingAndRefactoringTask1UnitTestProject.csproj", "{E7CC3A7C-A558-40D8-A115-216F71EE0852}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{11171346-B978-47D5-9AF1-D90BEE023054}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11171346-B978-47D5-9AF1-D90BEE023054}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11171346-B978-47D5-9AF1-D90BEE023054}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7CC3A7C-A558-40D8-A115-216F71EE0852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7CC3A7C-A558-40D8-A115-216F71EE0852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7CC3A7C-A558-40D8-A115-216F71EE0852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7CC3A7C-A558-40D8-A115-216F71EE0852}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
