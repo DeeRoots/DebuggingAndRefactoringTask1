@@ -17,6 +17,7 @@ namespace BankingSystem
             var accountServices = new AccountServices();
             var generalServices = new GeneralServices();
             var transactionServices = new TransactionServices();
+
             while (true)
             {
                 RunApplication(accountServices, generalServices, transactionServices);
@@ -45,13 +46,80 @@ namespace BankingSystem
                     DisplayAccountTransactionHistory(accountServices, generalServices, transactionServices);
                     break;
                 case 6:
-                    MonetaryInteraction(AccountInteractionType.Tranfer, accountServices, generalServices, transactionServices);
+                    MonetaryInteraction(AccountInteractionType.Tranfer, accountServices, generalServices, transactionServices);                    
                     break;
                 case 7:
+                    EditAccountName(accountServices, generalServices, transactionServices);                    
+                    break;
+                case 8:
+                    DeleteAccount(accountServices, generalServices, transactionServices);
+                    break;
+                case 9:
                     Environment.Exit(0);
                     break;
                 default:
                     break;
+            }
+        }
+
+        private static void DeleteAccount(AccountServices accountServices, GeneralServices generalServices, TransactionServices transactionServices)
+        {
+            try
+            {
+                var accountCodeParsed = generalServices.GatherNumericInput("Enter Account Code: ");
+
+                if (accountCodeParsed != null)
+                {
+                    var confirmed = generalServices.GatherTextualInput("Enter 'Y' to delete Account: ");
+
+                    if (confirmed.ToUpper() == "Y")
+                    {
+                        var success = accountServices.ProcessDeleteAccount(accountCodeParsed.Value);
+                        if (success)
+                            generalServices.DisplayMessage(MessageType.Success, $"Account : {accountCodeParsed} has been deleted.");
+                        else
+                            generalServices.DisplayMessage(MessageType.Warning, $"Account : {accountCodeParsed} has NOT been deleted.");
+                    }
+                    else
+                        generalServices.DisplayMessage(MessageType.Warning, $"Account : {accountCodeParsed} has NOT been deleted by choice.");
+
+                }
+                else
+                {
+                    generalServices.DisplayMessage(MessageType.Error, "Account Code was null - Please try again");
+                }
+            }
+            catch (Exception e)
+            {
+                generalServices.DisplayMessage(MessageType.Error, "Exception Hit.");
+            }
+        }
+
+        private static void EditAccountName(AccountServices accountServices, GeneralServices generalServices, TransactionServices transactionServices)
+        {
+            try
+            {
+                var accountCodeParsed = generalServices.GatherNumericInput("Enter Account Code: ");
+
+                if (accountCodeParsed != null)
+                {
+                    var newAccountNameParsed = generalServices.GatherTextualInput("Enter new Name: ");
+
+                    var success = accountServices.ProcessEditAccountName(accountCodeParsed.Value, newAccountNameParsed);
+                    if (success)
+                        generalServices.DisplayMessage(MessageType.Success, $"Account Name updated.");
+                    else
+                        generalServices.DisplayMessage(MessageType.Warning, $"Account Name was not updated.");
+
+                }
+                else
+                {
+                    generalServices.DisplayMessage(MessageType.Error, "Account Code was null - Please try again");
+                }
+            }
+            catch (Exception e)
+            {
+                generalServices.DisplayMessage(MessageType.Error, "Exception Hit.");
             }
         }
 
@@ -97,7 +165,7 @@ namespace BankingSystem
                         if (sucess)
                             generalServices.DisplayMessage(MessageType.Success, $"Account : {accountCodeParsed} has been added.");
                         else
-                            generalServices.DisplayMessage(MessageType.Error, $"Account : {accountCodeParsed} has NOT been added. Account code alreay exists.");
+                            generalServices.DisplayMessage(MessageType.Warning, $"Account : {accountCodeParsed} has NOT been added. Account code alreay exists.");
                     }
                 }
                 else
@@ -142,7 +210,7 @@ namespace BankingSystem
                                 if (transactionSuccess)
                                     generalServices.DisplayMessage(MessageType.Success, "Transaction record successful.");
                                 else
-                                    generalServices.DisplayMessage(MessageType.Error, "Transaction record unsuccessful.");
+                                    generalServices.DisplayMessage(MessageType.Warning, "Transaction record unsuccessful.");
 
                             }
                             else
@@ -157,7 +225,7 @@ namespace BankingSystem
                                 if (transactionSuccess)
                                     generalServices.DisplayMessage(MessageType.Success, "Transaction record successful.");
                                 else
-                                    generalServices.DisplayMessage(MessageType.Error, "Transaction record unsuccessful.");
+                                    generalServices.DisplayMessage(MessageType.Warning, "Transaction record unsuccessful.");
                             }
                             else
                                 generalServices.DisplayMessage(MessageType.Warning, "Withdrawal unsuccessful. Insufficient funds");
@@ -200,7 +268,7 @@ namespace BankingSystem
 
                 if (parsedAccountCode != null)
                 {
-                    var account = accountServices.GetAccount(parsedAccountCode.Value);
+                    var account = accountServices.GetAccountDetails(parsedAccountCode.Value);
 
                     if (account.Id != -1)
                     {

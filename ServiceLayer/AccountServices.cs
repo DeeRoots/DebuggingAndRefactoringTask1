@@ -28,21 +28,26 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
 
         private bool DoesAccountCodeExist(int accountCode)
         {
-            foreach (var account in accounts.Where(a => a.AccountCode == accountCode))
+            if (accounts.Count > 0)
             {
-                return true;
-            }            
+                foreach (var account in accounts.Where(a => a.AccountCode == accountCode))
+                {
+                    return true;
+                }
+            }
             return false;
         }
 
-        public Account GetAccount(int accountCode)
+        public Account GetAccountDetails(int accountCode)
         {
-            foreach (var account in accounts.Where(a => a.AccountCode == accountCode))
-            {
-                return account;
-            }
 
-            return new Account {Id = -1 };
+            return GetAccount(accountCode);
+            //foreach (var account in accounts.Where(a => a.AccountCode == accountCode))
+            //{
+            //    return account;
+            //}
+
+            //return new Account {Id = -1 };
         }
 
         public bool DepositAccount(int accountCode, double amount)
@@ -97,5 +102,40 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
                 return false;
             }
         }
+
+        public bool ProcessDeleteAccount(int accountCode)
+        {
+            bool accountCodeExists = DoesAccountCodeExist(accountCode);
+            if (accountCodeExists)
+            {
+                var success = DeleteAccount(accountCode);
+                if (success)
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+
+        public bool ProcessEditAccountName(int accountCode, string? newAccountName)
+        {
+            bool accountCodeExists = DoesAccountCodeExist(accountCode);           
+
+            if (accountCodeExists)
+            {             
+                var success = EditAccountName(accountCode, newAccountName);
+                if (success)
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
+
+            var account = GetAccount(accountCode);
+        }
+
+     
     }
 }

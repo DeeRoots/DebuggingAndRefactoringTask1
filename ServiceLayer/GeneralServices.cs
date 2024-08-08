@@ -97,8 +97,10 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
             DisplayMessage(MessageType.MenuItem, $"3. Withdraw Money");
             DisplayMessage(MessageType.MenuItem, $"4. Display Account Details");
             DisplayMessage(MessageType.MenuItem, $"5. Display Account Transaction History");
-            DisplayMessage(MessageType.MenuItem, $"6. Tranfer between accounts");
-            DisplayMessage(MessageType.MenuItem, $"7. Exit \n");
+            DisplayMessage(MessageType.MenuItem, $"6. Transfer between accounts");
+            DisplayMessage(MessageType.MenuItem, $"7. Edit Account Name");
+            DisplayMessage(MessageType.MenuItem, $"8. DELETE ACCOUNT");
+            DisplayMessage(MessageType.MenuItem, $"9. Exit \n");
 
             var choiceParsed = GatherNumericInput($"Choice: ");
 
