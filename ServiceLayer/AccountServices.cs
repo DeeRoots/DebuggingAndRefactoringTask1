@@ -26,7 +26,7 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
                 return false;
         }
 
-        private bool DoesAccountCodeExist(int accountCode)
+        public bool DoesAccountCodeExist(int accountCode)
         {
             if (accounts.Count > 0)
             {
@@ -40,19 +40,13 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
 
         public Account GetAccountDetails(int accountCode)
         {
-
-            return GetAccount(accountCode);
-            //foreach (var account in accounts.Where(a => a.AccountCode == accountCode))
-            //{
-            //    return account;
-            //}
-
-            //return new Account {Id = -1 };
+            return GetAccount(accountCode);           
         }
 
         public bool DepositAccount(int accountCode, double amount)
         {
             var account = GetAccount(accountCode);
+
             if (account != null)
             {
                 account.AccountBalance = account.AccountBalance += amount;
@@ -67,10 +61,12 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
         public bool WithdrawAccount(int accountCode, double amount)
         {
             var account = GetAccount(accountCode);
-            var accountOriginalBalance = account.AccountBalance;            
+            var accountOriginalBalance = account.AccountBalance;   
+            
             if (account != null)
             {
                 account.AccountBalance = amount <= account.AccountBalance ? account.AccountBalance -= amount : account.AccountBalance = accountOriginalBalance;
+
                 if (account.AccountBalance < accountOriginalBalance) 
                     return true;
                 else
@@ -87,6 +83,7 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
             var account = GetAccount(accountCode);
             var recipientAccount = GetAccount(accountCodeTo);
             var accountOriginalBalance = account.AccountBalance;
+
             if (account != null && recipientAccount != null)
             {
                 recipientAccount.AccountBalance = amount <= account.AccountBalance ? recipientAccount.AccountBalance += amount : account.AccountBalance = accountOriginalBalance;
@@ -132,10 +129,6 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
             }
             else
                 return false;
-
-            var account = GetAccount(accountCode);
-        }
-
-     
+        }     
     }
 }

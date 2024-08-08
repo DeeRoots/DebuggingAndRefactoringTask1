@@ -10,7 +10,7 @@ using static DebuggingAndRefactoringTask1.Repository.TransactionRepository;
 namespace BankingSystem
 {
    
-    class Program
+    public static class Program
     {           
         static void Main(string[] args)
         {
@@ -23,7 +23,7 @@ namespace BankingSystem
                 RunApplication(accountServices, generalServices, transactionServices);
             }
         } 
-        static void RunApplication(AccountServices accountServices, GeneralServices generalServices, TransactionServices transactionServices)
+        public static void RunApplication(AccountServices accountServices, GeneralServices generalServices, TransactionServices transactionServices)
         {
             var choiceParsed = generalServices.DisplayMenu();
             
@@ -62,7 +62,7 @@ namespace BankingSystem
             }
         }
 
-        private static void DeleteAccount(AccountServices accountServices, GeneralServices generalServices, TransactionServices transactionServices)
+        public static void DeleteAccount(AccountServices accountServices, GeneralServices generalServices, TransactionServices transactionServices)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace BankingSystem
             }
         }
 
-        private static void EditAccountName(AccountServices accountServices, GeneralServices generalServices, TransactionServices transactionServices)
+        public static void EditAccountName(AccountServices accountServices, GeneralServices generalServices, TransactionServices transactionServices)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace BankingSystem
             }
         }
 
-        private static void DisplayAccountTransactionHistory(AccountServices accountServices, GeneralServices generalServices, TransactionServices transactionServices)
+        public static void DisplayAccountTransactionHistory(AccountServices accountServices, GeneralServices generalServices, TransactionServices transactionServices)
         {
             try
             {
@@ -149,7 +149,7 @@ namespace BankingSystem
             }
         }
 
-        static void AddAccount(AccountServices accountServices, GeneralServices generalServices)
+        public static void AddAccount(AccountServices accountServices, GeneralServices generalServices)
         {
             try
             {               
@@ -179,7 +179,7 @@ namespace BankingSystem
             }
         }
 
-        static void MonetaryInteraction(AccountInteractionType accountInteractionType, AccountServices accountServices, GeneralServices generalServices, TransactionServices transactionServices)
+        public static void MonetaryInteraction(AccountInteractionType accountInteractionType, AccountServices accountServices, GeneralServices generalServices, TransactionServices transactionServices)
         {
             try
             {
@@ -260,7 +260,7 @@ namespace BankingSystem
             }          
         }     
 
-        static void DisplayAccountDetails(AccountServices accountServices, GeneralServices generalServices)
+        public static void DisplayAccountDetails(AccountServices accountServices, GeneralServices generalServices)
         {
             try
             {

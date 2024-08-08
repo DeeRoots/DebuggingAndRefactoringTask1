@@ -22,6 +22,11 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
                 DisplayMessage(MessageType.Error, "Please provide input");
                 return null;
             }
+            else if (rawInput.Length >= 15)
+            {
+                DisplayMessage(MessageType.Error, "Input too long at over 15 chars");
+                return null;
+            }
             else
             {
                 return rawInput;
@@ -36,7 +41,7 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
                 Console.ForegroundColor = ConsoleColor.White;
                 var resultParse = int.TryParse(Console.ReadLine(), out int result);
                 Console.Write(Environment.NewLine);
-                if (resultParse && result <= int.MaxValue && result >= int.MinValue)
+                if (resultParse && result < 99999999 && result > 0)
                 {
                     var numericInput = result;
                     return numericInput;
