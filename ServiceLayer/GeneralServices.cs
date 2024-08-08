@@ -96,7 +96,7 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
 
         public int? DisplayMenu() 
         {
-            DisplayMessage(MessageType.Information, $"Options:\n");
+            DisplayMessage(MessageType.Information, $"Options:");
             DisplayMessage(MessageType.MenuItem, $"1. Add Account");
             DisplayMessage(MessageType.MenuItem, $"2. Deposit Money");
             DisplayMessage(MessageType.MenuItem, $"3. Withdraw Money");
@@ -154,7 +154,6 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
         public static void DisplayErrorMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("");
             Console.WriteLine(message);
             Console.WriteLine("");
             Console.ForegroundColor = ConsoleColor.White;
@@ -168,7 +167,7 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
         }
         public static void DisplayMenuMessage(string message)
         {
-            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
         }
