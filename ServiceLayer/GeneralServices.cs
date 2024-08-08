@@ -7,36 +7,52 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
         #region Input
         public  string? GatherTextualInput(string message)
         {
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write(message);
-            Console.ForegroundColor = ConsoleColor.White;
-            var rawInput = Console.ReadLine();
+            try
+            {
+                //Gather
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write(message);
+                Console.ForegroundColor = ConsoleColor.White;
 
-            if (string.IsNullOrEmpty(rawInput))
+                var rawInput = Console.ReadLine();
+
+                //Validate
+                if (string.IsNullOrEmpty(rawInput))
+                {
+                    DisplayMessage(MessageType.Error, "Please provide input");
+                    return null;
+                }
+                else if (rawInput.Length > 15)
+                {
+                    DisplayMessage(MessageType.Error, "Input too long at over 15 chars");
+                    return null;
+                }
+                else
+                {
+                    return rawInput;
+                }
+            }
+            catch (Exception e)
             {
-                DisplayMessage(MessageType.Error, "Please provide input");
+                DisplayMessage(MessageType.Error, "Exception Hit.");
                 return null;
-            }
-            else if (rawInput.Length > 15)
-            {
-                DisplayMessage(MessageType.Error, "Input too long at over 15 chars");
-                return null;
-            }
-            else
-            {
-                return rawInput;
-            }
+                
+            }           
         }
+
         public int? GatherNumericInput(string message)
         {
             try
             {
+                //Gather
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.Write(message);
                 Console.ForegroundColor = ConsoleColor.White;
+
+                //Valiadate
                 var resultParse = int.TryParse(Console.ReadLine(), out int result);
                 Console.Write(Environment.NewLine);
-                if (resultParse && result < 99999999 && result > 0)
+                if (resultParse && (result < 99999999 || result > 0))
                 {
                     var numericInput = result;
                     return numericInput;
@@ -53,13 +69,17 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
                 return null;
             }
         }
+
         public double? GatherDoublelInput(string message)
         {
             try
             {
+                //Gather
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.Write(message);
                 Console.ForegroundColor = ConsoleColor.White;
+
+                //Validate
                 var resultParse = double.TryParse(Console.ReadLine(), out double result);
                 Console.Write(Environment.NewLine);
                 if (resultParse && result <= double.MaxValue && result >= double.MinValue)
@@ -88,9 +108,9 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
         #endregion
 
         #region Messages
-
         public int? DisplayMenu() 
         {
+            //Display Menu Items
             DisplayMessage(MessageType.Information, $"Options:");
             DisplayMessage(MessageType.MenuItem, $"1. Add Account");
             DisplayMessage(MessageType.MenuItem, $"2. Deposit Money");
@@ -102,12 +122,15 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
             DisplayMessage(MessageType.MenuItem, $"8. DELETE ACCOUNT");
             DisplayMessage(MessageType.MenuItem, $"9. Exit \n");
 
+            //Parse input
             var choiceParsed = GatherNumericInput($"Choice: ");
 
+            //Validation of choice
             if (choiceParsed > 9 || choiceParsed < 1)
             {
                 DisplayMessage(MessageType.Error, $"Options are between 1 and 9 plesae reselect.");
 
+                //redisplay menu if invalid
                 return DisplayMenu();
             }
 
@@ -116,6 +139,7 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
 
         public void DisplayMessage(MessageType type, string message)
         {
+            //Message Bus for different MessageType
             switch (type)
             {
                 case MessageType.Information:
@@ -136,7 +160,6 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
                 case MessageType.Input:
                     DisplayInputMessage(message);
                     break;
-
                 default:
                     break;
             }

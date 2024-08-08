@@ -21,7 +21,7 @@ namespace BankingSystem
         {
             var choiceParsed = generalServices.DisplayMenu();
             
-
+            //Option Bus
             switch (choiceParsed)
             {
                 case 1:
@@ -60,14 +60,17 @@ namespace BankingSystem
         {
             try
             {
+                //Gather
                 var accountCodeParsed = generalServices.GatherNumericInput("Enter Account Code: ");
 
                 if (accountCodeParsed != null)
                 {
+                    //Confirm
                     var confirmed = generalServices.GatherTextualInput("Enter 'Y' to delete Account: ");
 
                     if (confirmed.ToUpper() == "Y")
                     {
+                        //Process
                         var success = accountServices.ProcessDeleteAccount(accountCodeParsed.Value);
                         if (success)
                             generalServices.DisplayMessage(MessageType.Success, $"Account : {accountCodeParsed} has been deleted.");
@@ -93,12 +96,14 @@ namespace BankingSystem
         {
             try
             {
+                //Gather
                 var accountCodeParsed = generalServices.GatherNumericInput("Enter Account Code: ");
 
                 if (accountCodeParsed != null)
                 {
                     var newAccountNameParsed = generalServices.GatherTextualInput("Enter new Name: ");
 
+                    //Process
                     var success = accountServices.ProcessEditAccountName(accountCodeParsed.Value, newAccountNameParsed);
                     if (success)
                         generalServices.DisplayMessage(MessageType.Success, $"Account Name updated.");
@@ -121,11 +126,13 @@ namespace BankingSystem
         {
             try
             {
+                //Gather
                 var accountCodeParsed = generalServices.GatherNumericInput("Enter Account Code: ");
 
                 if (accountCodeParsed != null)
                 {                   
-                        var transactionLog = transactionServices.DisplayAccountTransactionHistoryDetails(accountCodeParsed.Value);
+                    //Process
+                    var transactionLog = transactionServices.DisplayAccountTransactionHistoryDetails(accountCodeParsed.Value);
                     if (transactionLog.Length > 0)
                         generalServices.DisplayMessage(MessageType.Information, $"Account Transaction History : \n {transactionLog}");
                     else
@@ -147,6 +154,7 @@ namespace BankingSystem
         {
             try
             {               
+                //Gather
                 var accountCodeParsed = generalServices.GatherNumericInput("Enter Account Code: ");
 
                 if (accountCodeParsed != null)
@@ -155,6 +163,7 @@ namespace BankingSystem
 
                     if (accountNameParsed != null)
                     {
+                        //Process
                         var sucess = accountServices.ProcessAccount(accountCodeParsed.Value, accountNameParsed);
                         if (sucess)
                             generalServices.DisplayMessage(MessageType.Success, $"Account : {accountCodeParsed} has been added.");
@@ -177,11 +186,15 @@ namespace BankingSystem
         {
             try
             {
+                //Gather
                 var parsedAccountCode = generalServices.GatherNumericInput("Enter Account Code: ");
+
+                //TRANSFER ONLY- Gather recipient
                 var parsedAccountCodeRecipient = accountInteractionType == AccountInteractionType.Tranfer ? generalServices.GatherNumericInput("Enter Recipient Account Code: ") : null;
 
                 var parsedMonetarylAmount = accountInteractionType == AccountInteractionType.Deposit ? generalServices.GatherDoublelInput("Enter Amount to Deposit: ") : accountInteractionType == AccountInteractionType.Tranfer ? generalServices.GatherDoublelInput("Enter Amount to Transfer: ") : generalServices.GatherDoublelInput("Enter Amount to Withdraw: ");
-
+                
+                //Validate
                 if (parsedMonetarylAmount <= 0)
                 {
                     generalServices.DisplayMessage(MessageType.Warning, "Deposit, Withdrawal or Transfer cannot be equal to or less than 0.00 or 0");
@@ -192,6 +205,7 @@ namespace BankingSystem
                 var transactionSuccess = false;
                 if (parsedAccountCode != null && parsedMonetarylAmount != null)
                 {
+                    //Monetary Interaction Bus Processing
                     switch (accountInteractionType)
                     {
                         case AccountInteractionType.Deposit:
@@ -199,6 +213,7 @@ namespace BankingSystem
                             success = accountServices.DepositAccount(parsedAccountCode.Value, parsedMonetarylAmount.Value);
                             if (success)
                             {
+                                //Transactional Log
                                 transactionSuccess = transactionServices.ProcessTransaction(parsedAccountCode.Value, parsedAccountCode.Value, parsedMonetarylAmount.Value, accountInteractionType);
                                 generalServices.DisplayMessage(MessageType.Success, "Deposit successful.");
                                 if (transactionSuccess)
@@ -211,9 +226,11 @@ namespace BankingSystem
                                 generalServices.DisplayMessage(MessageType.Warning, "Deposit unsuccessful.");
                             break;
                         case AccountInteractionType.Withdraw:
+
                             success = accountServices.WithdrawAccount(parsedAccountCode.Value, parsedMonetarylAmount.Value);
                             if (success)
                             {
+                                //Transactional Log
                                 transactionSuccess = transactionServices.ProcessTransaction(parsedAccountCode.Value, parsedAccountCode.Value, parsedMonetarylAmount.Value, accountInteractionType);
                                 generalServices.DisplayMessage(MessageType.Success, "Withdrawal successful.");
                                 if (transactionSuccess)
@@ -229,6 +246,7 @@ namespace BankingSystem
                             success = accountServices.TransferBetweenAccounts(parsedAccountCode.Value, parsedAccountCodeRecipient.Value, parsedMonetarylAmount.Value);
                             if (success)
                             {
+                                //Transactional Log
                                 transactionSuccess = transactionServices.ProcessTransaction(parsedAccountCode.Value, parsedAccountCodeRecipient.Value, parsedMonetarylAmount.Value, accountInteractionType);
                                 generalServices.DisplayMessage(MessageType.Success, $"Transfer successful, you sent {parsedMonetarylAmount} to {parsedAccountCodeRecipient} ");
                                 if (transactionSuccess)
@@ -258,14 +276,17 @@ namespace BankingSystem
         {
             try
             {
+                //Gather
                 var parsedAccountCode = generalServices.GatherNumericInput("Enter Account Code: ");
 
+                //Validate
                 if (parsedAccountCode != null)
                 {
                     var account = accountServices.GetAccountDetails(parsedAccountCode.Value);
 
                     if (account.Id != -1)
                     {
+                        //Only show what we want them to see.
                         generalServices.DisplayMessage(MessageType.MenuItem, $"Account Code: {account.AccountCode}");
                         generalServices.DisplayMessage(MessageType.MenuItem, $"Account Holder: {account.AccountName}");
                         generalServices.DisplayMessage(MessageType.MenuItem, $"Balance: {account.AccountBalance.ToString("0.00")}");

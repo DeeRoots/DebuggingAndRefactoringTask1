@@ -7,9 +7,11 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
     {
         public bool ProcessAccount(int accountCode, string accountName)
         {
+            //Validate
             bool accountCodeExists = DoesAccountCodeExist(accountCode);
             if (!accountCodeExists)
             {
+                //Process
                 var success = AddAccount(new Account { Id = accounts.Count() + 1, AccountCode = accountCode, AccountName = accountName, AccountBalance = 0.00 });
                 if (success) 
                     return true;
@@ -59,6 +61,7 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
             
             if (account != null)
             {
+                //Checks if there is sufficient balance - if not reset original balance.
                 account.AccountBalance = amount <= account.AccountBalance ? account.AccountBalance -= amount : account.AccountBalance = accountOriginalBalance;
 
                 if (account.AccountBalance < accountOriginalBalance) 
@@ -80,6 +83,7 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
 
             if (account != null && recipientAccount != null)
             {
+                //Checks sender has sufficient funds before sending to recipient and updating balance.
                 recipientAccount.AccountBalance = amount <= account.AccountBalance ? recipientAccount.AccountBalance += amount : account.AccountBalance = accountOriginalBalance;
                 account.AccountBalance = amount <= account.AccountBalance ? account.AccountBalance -= amount : account.AccountBalance = accountOriginalBalance;
 

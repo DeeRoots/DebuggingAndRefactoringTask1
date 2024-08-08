@@ -14,6 +14,7 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
 
         public string DisplayAccountTransactionHistoryDetails(int accountCode)
         {
+            //Gets log as \n separated string.
             var value = GetAccountTransactions(accountCode);
             return value;
         }

@@ -2,6 +2,7 @@
 {
     public static class Enums
     {
+        //MessageType for Message Bus
         public enum MessageType
         {
             Information = 0,
@@ -12,6 +13,8 @@
             Input = 5
 
         }
+
+        //AccountInteractionType for Monetary interactions.
         public enum AccountInteractionType
         {
             Deposit = 0,
