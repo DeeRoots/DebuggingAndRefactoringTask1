@@ -1,11 +1,5 @@
-﻿using DebuggingAndRefactoringTask1.Models;
-using DebuggingAndRefactoringTask1.ServiceLayer;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using DebuggingAndRefactoringTask1.ServiceLayer;
 using static DebuggingAndRefactoringTask1.Enums.Enums;
-using static DebuggingAndRefactoringTask1.Repository.AccountRepository;
-using static DebuggingAndRefactoringTask1.Repository.TransactionRepository;
 
 namespace BankingSystem
 {
@@ -186,11 +180,11 @@ namespace BankingSystem
                 var parsedAccountCode = generalServices.GatherNumericInput("Enter Account Code: ");
                 var parsedAccountCodeRecipient = accountInteractionType == AccountInteractionType.Tranfer ? generalServices.GatherNumericInput("Enter Recipient Account Code: ") : null;
 
-                var parsedMonetarylAmount = accountInteractionType == AccountInteractionType.Deposit ? generalServices.GatherDoublelInput("Enter Amount to Deposit: ") : accountInteractionType == AccountInteractionType.Deposit ? generalServices.GatherDoublelInput("Enter Amount to Transfer: ") : generalServices.GatherDoublelInput("Enter Amount to Withdraw: ");
+                var parsedMonetarylAmount = accountInteractionType == AccountInteractionType.Deposit ? generalServices.GatherDoublelInput("Enter Amount to Deposit: ") : accountInteractionType == AccountInteractionType.Tranfer ? generalServices.GatherDoublelInput("Enter Amount to Transfer: ") : generalServices.GatherDoublelInput("Enter Amount to Withdraw: ");
 
                 if (parsedMonetarylAmount <= 0)
                 {
-                    generalServices.DisplayMessage(MessageType.Warning, "Deposit, Withdrawal or transfer cannot be equal to or less than 0.00 or 0");
+                    generalServices.DisplayMessage(MessageType.Warning, "Deposit, Withdrawal or Transfer cannot be equal to or less than 0.00 or 0");
                     return;
                 }
 
@@ -240,11 +234,11 @@ namespace BankingSystem
                                 if (transactionSuccess)
                                     generalServices.DisplayMessage(MessageType.Success, "Transaction record successful.");
                                 else
-                                    generalServices.DisplayMessage(MessageType.Error, "Transaction record unsuccessful.");
+                                    generalServices.DisplayMessage(MessageType.Warning, "Transaction record unsuccessful.");
 
                             }
                             else
-                                generalServices.DisplayMessage(MessageType.Warning, "Transfer successful, Insufficient funds");
+                                generalServices.DisplayMessage(MessageType.Warning, "Transfer unuccessful, Insufficient funds  or one or more accounts do not exist.");
                             break;
                         default:
                             break;

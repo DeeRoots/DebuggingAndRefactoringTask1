@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DebuggingAndRefactoringTask1.Models;
+﻿using DebuggingAndRefactoringTask1.Models;
 using static DebuggingAndRefactoringTask1.Repository.AccountRepository; 
 
 namespace DebuggingAndRefactoringTask1.ServiceLayer
@@ -95,7 +89,7 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
                     return false;
             }
             else
-            {
+            {                
                 return false;
             }
         }

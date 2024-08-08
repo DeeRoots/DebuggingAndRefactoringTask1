@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static DebuggingAndRefactoringTask1.Enums.Enums;
+﻿using static DebuggingAndRefactoringTask1.Enums.Enums;
 
 namespace DebuggingAndRefactoringTask1.ServiceLayer
 {
@@ -22,7 +17,7 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
                 DisplayMessage(MessageType.Error, "Please provide input");
                 return null;
             }
-            else if (rawInput.Length >= 15)
+            else if (rawInput.Length > 15)
             {
                 DisplayMessage(MessageType.Error, "Input too long at over 15 chars");
                 return null;
@@ -108,6 +103,13 @@ namespace DebuggingAndRefactoringTask1.ServiceLayer
             DisplayMessage(MessageType.MenuItem, $"9. Exit \n");
 
             var choiceParsed = GatherNumericInput($"Choice: ");
+
+            if (choiceParsed > 9 || choiceParsed < 1)
+            {
+                DisplayMessage(MessageType.Error, $"Options are between 1 and 9 plesae reselect.");
+
+                return DisplayMenu();
+            }
 
             return choiceParsed;
         }
